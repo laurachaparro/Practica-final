@@ -1,0 +1,148 @@
+---
+title: "Practica"
+author: "Laura Chaparro"
+date: "20/1/2022"
+output:
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#**Practica Penguins**
+
+Cargamos las librerias y los datos a utilizar
+
+```{r}
+library(dplyr)
+library(plyr)
+library(ggplot2)
+library(palmerpenguins)
+data(package = 'palmerpenguins')
+```
+
+Observamos los datos
+
+```{r}
+View(penguins)
+View(penguins_raw)
+str(penguins)
+summary(penguins)
+```
+
+##**Punto 1**
+
+Número de individuos totales : **344**
+
+```{r}
+length(penguins$species)
+```
+
+
+masculinos y femeninos por especie.
+
+```{r}
+ggplot(data = penguins)+
+  geom_count(aes(x= sex, y = species))
+table(penguins$sex, penguins$species)
+```
+
+
+La media, desviación estándar, valor mínimo y máximo de la longitud y profundidad del pico, la longitud de la aleta y el tamaño
+
+*Media*
+```{r}
+penguins <- na.omit(penguins)
+
+tapply(penguins$bill_length_mm, penguins$species, mean)
+tapply(penguins$bill_depth_mm, penguins$species, mean)
+tapply(penguins$flipper_length_mm, penguins$species, mean)
+tapply(penguins$body_mass_g, penguins$species, mean)
+```
+
+*Desviacion estandar*
+
+```{r}
+tapply(penguins$bill_length_mm, penguins$species, sd)
+tapply(penguins$bill_depth_mm, penguins$species, sd)
+tapply(penguins$flipper_length_mm, penguins$species, sd)
+tapply(penguins$body_mass_g, penguins$species, sd)
+```
+
+*Valor maximo*
+
+```{r}
+tapply(penguins$bill_length_mm, penguins$species, max)
+tapply(penguins$bill_depth_mm, penguins$species, max)
+tapply(penguins$flipper_length_mm, penguins$species, max)
+tapply(penguins$body_mass_g, penguins$species, max)
+```
+*Valor minimo*
+
+```{r}
+tapply(penguins$bill_length_mm, penguins$species, min)
+tapply(penguins$bill_depth_mm, penguins$species, min)
+tapply(penguins$flipper_length_mm, penguins$species, min)
+tapply(penguins$body_mass_g, penguins$species, min)
+```
+##**Punto 2**
+
+Un gráfico de barras que represente el número de individuos muestreados de cada especie en cada isla, representando las especies en diferentes colores (chinstrap – morado, gentoo – azul, adelie – naranja).
+
+```{r}
+penguins <- penguins %>%
+  mutate(species = factor(species, levels = c('Adelie', 'Chinistrap', 'Gentoo')))
+
+ggplot(data = penguins) +
+  geom_count(aes(x = island, y = species))
+
+table(penguins$island, penguins$species )
+
+ggplot(data = penguins) +
+  geom_bar(aes(x = island, fill = species))+
+  scale_fill_manual(values = c("orange", "purple", "blue"))
+```
+
+Contesta a las siguientes preguntas: 
+
+**1.**¿qué especie se ha muestreado en las tres islas?:
+**Adeline**
+
+**2.**¿cuántos individuos se han muestreado de la isla Dream?
+**55**
+
+##**Punto 3**
+
+Un gráfico multipanel de cajas y bigotes del tamaño de los pingüinos según su sexo, donde aparezca un panel para cada especie.
+
+```{r}
+ggplot(data = penguins)+
+  geom_boxplot(aes(x = species, y = body_mass_g, fill = sex ))
+```
+
+Contesta a las siguientes preguntas: 
+
+**1.**¿qué especie tiene mayor tamaño? 
+**Gentoo**
+
+**2.**¿en qué especie las hembras y los machos tienen un tamaño más similar? 
+**Chinistrap o (NA)**
+
+```{r}
+citation("ggplot2")
+```
+
+
+```{r}
+citation("dplyr")
+```
+```{r}
+citation("plyr")
+```
+
+```{r}
+citation("palmerpenguins")
+```
+
